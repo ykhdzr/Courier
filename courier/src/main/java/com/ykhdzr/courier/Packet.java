@@ -46,6 +46,6 @@ public abstract class Packet<T> {
     }
 
     @NonNull
-    abstract Class provideClass();
+    public abstract Class provideClass();
 
 }
