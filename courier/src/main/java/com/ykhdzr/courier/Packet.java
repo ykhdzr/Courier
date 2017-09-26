@@ -2,7 +2,7 @@ package com.ykhdzr.courier;
 
 import android.support.annotation.NonNull;
 
-import rx.subjects.BehaviorSubject;
+import io.reactivex.subjects.BehaviorSubject;
 
 /**
  * Created by ykhdzr on 9/15/17.
@@ -10,11 +10,11 @@ import rx.subjects.BehaviorSubject;
 
 public abstract class Packet<T> {
 
-    private String tag;
+    private BehaviorSubject<T> behaviorSubject = BehaviorSubject.create();
 
     private T data;
 
-    private BehaviorSubject<T> behaviorSubject = BehaviorSubject.create();
+    private String tag;
 
     public Packet(String tag) {
         this.tag = tag;
@@ -28,6 +28,9 @@ public abstract class Packet<T> {
     public String getTag() {
         return provideClass().getSimpleName() + tag;
     }
+
+    @NonNull
+    public abstract Class provideClass();
 
     public T getData() {
         return data;
@@ -44,8 +47,5 @@ public abstract class Packet<T> {
     public BehaviorSubject<T> getBehaviorSubject() {
         return behaviorSubject;
     }
-
-    @NonNull
-    public abstract Class provideClass();
 
 }

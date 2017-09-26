@@ -2,8 +2,8 @@ package com.ykhdzr.courier;
 
 import java.util.HashMap;
 
-import rx.Subscription;
-import rx.functions.Action1;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
 
 /**
  * Created by ykhdzr on 9/15/17.
@@ -13,9 +13,9 @@ public class Courier {
 
     private static Courier instance;
 
-    private HashMap<String, Packet> packetGroup;
-
     private Packet packet;
+
+    private HashMap<String, Packet> packetGroup;
 
     public static Courier getInstance() {
         if (instance == null) {
@@ -47,14 +47,20 @@ public class Courier {
         packetGroup.get(packet.getTag()).accept();
     }
 
+    private void checkPacketNull() {
+        if (packet == null) {
+            throw new IllegalArgumentException("event can not be null");
+        }
+    }
+
     public void clear() {
         if (packetGroup != null) {
             packetGroup.clear();
         }
     }
 
-    public <T> Subscription subscribe(final Action1<? super T> onNext,
-        final Action1<Throwable> onError) {
+    public <T> Disposable subscribe(final Consumer<? super T> onNext,
+        final Consumer<Throwable> onError) {
         checkPacketNull();
         checkActionNull(onNext, onError);
         return packetGroup
@@ -63,14 +69,8 @@ public class Courier {
             .subscribe(onNext, onError);
     }
 
-    private void checkPacketNull() {
-        if (packet == null) {
-            throw new IllegalArgumentException("event can not be null");
-        }
-    }
-
-    private <T> void checkActionNull(final Action1<? super T> onNext,
-        final Action1<Throwable> onError) {
+    private <T> void checkActionNull(final Consumer<? super T> onNext,
+        final Consumer<Throwable> onError) {
         if (onNext == null) {
             throw new IllegalArgumentException("onNext can not be null");
         }
