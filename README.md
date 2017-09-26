@@ -9,7 +9,7 @@ Installation
 To include in your gradle app:
 
 	dependencies {
-	  compile 'com.ykhdzr:courier:1.0.1'
+	  compile 'com.ykhdzr:courier:1.0.2'
 	}
 
 License
